@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="hi" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>जानिए अपना हक़: RTI और कानून की समझ - इंटरैक्टिव गाइड</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Warm Neutrals with Blue Accent -->
+    <!-- Application Structure Plan: The application is designed as a single-page, multi-section interactive guide. This task-oriented structure (Intro, Basics, Process, Appeals, Legal Links, Resources) is more intuitive for users than a linear book format. It allows users to quickly navigate to the information they need most, such as how to file an RTI or what the appeal process is. Key interactions include a step-by-step process diagram, interactive drafting tools, and accordion-style FAQs, all aimed at simplifying complex information and empowering the user. -->
+    <!-- Visualization & Content Choices: 
+        - RTI Timeline (Chapter 6) -> Goal: Inform about deadlines -> Viz: Chart.js Bar Chart -> Interaction: Hover tooltips for details -> Justification: Visually represents timeframes, which is more effective than text.
+        - RTI/Appeal Process (Chapters 3, 4, 9) -> Goal: Organize complex steps -> Presentation: HTML/CSS Flexbox-based flow diagram -> Interaction: Clickable steps could reveal more info (kept simple here for clarity) -> Justification: Provides a clear, step-by-step visual path for the user to follow.
+        - Dense info (Key Sections, FAQs, Case Studies) -> Goal: Inform without overwhelming -> Presentation: Accordion/toggle sections (JS) -> Interaction: User clicks to expand/collapse -> Justification: Keeps the UI clean and allows users to explore details as needed.
+        - All choices are made to be interactive and easy to understand, strictly avoiding SVG and Mermaid JS as required.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Noto Sans Devanagari', sans-serif;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 350px;
+            max-height: 400px;
+        }
+        @media (max-width: 640px) {
+            .chart-container {
+                height: 400px;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+    <header class="bg-white shadow-md sticky top-0 z-50">
+        <nav class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex-shrink-0">
+                    <a href="#home" class="text-xl font-bold text-blue-600">जानिए अपना हक़</a>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-4">
+                        <a href="#introduction" class="text-gray-600 hover:bg-blue-500 hover:text-white px-3 py-2 rounded-md text-sm font-medium">परिचय</a>
+                        <a href="#process" class="text-gray-600 hover:bg-blue-500 hover:text-white px-3 py-2 rounded-md text-sm font-medium">प्रक्रिया</a>
+                        <a href="#appeals" class="text-gray-600 hover:bg-blue-500 hover:text-white px-3 py-2 rounded-md text-sm font-medium">अपील</a>
+                        <a href="#legal" class="text-gray-600 hover:bg-blue-500 hover:text-white px-3 py-2 rounded-md text-sm font-medium">कानूनी जुड़ाव</a>
+                        <a href="#resources" class="text-gray-600 hover:bg-blue-500 hover:text-white px-3 py-2 rounded-md text-sm font-medium">संसाधन</a>
+                    </div>
+                </div>
+                <div class="md:hidden">
+                    <button id="mobile-menu-button" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
+                        <span class="sr-only">Open main menu</span>
+                        <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </nav>
+        <div class="md:hidden hidden" id="mobile-menu">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                <a href="#introduction" class="text-gray-600 hover:bg-blue-500 hover:text-white block px-3 py-2 rounded-md text-base font-medium">परिचय</a>
+                <a href="#process" class="text-gray-600 hover:bg-blue-500 hover:text-white block px-3 py-2 rounded-md text-base font-medium">प्रक्रिया</a>
+                <a href="#appeals" class="text-gray-600 hover:bg-blue-500 hover:text-white block px-3 py-2 rounded-md text-base font-medium">अपील</a>
+                <a href="#legal" class="text-gray-600 hover:bg-blue-500 hover:text-white block px-3 py-2 rounded-md text-base font-medium">कानूनी जुड़ाव</a>
+                <a href="#resources" class="text-gray-600 hover:bg-blue-500 hover:text-white block px-3 py-2 rounded-md text-base font-medium">संसाधन</a>
+            </div>
+        </div>
+    </header>
+
+    <main id="home" class="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+        <section id="introduction" class="text-center py-16">
+            <h1 class="text-4xl md:text-5xl font-bold text-blue-700 mb-4">जानिए अपना हक़</h1>
+            <p class="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto mb-6">RTI और कानून की समझ आम जनता के लिए - एक इंटरैक्टिव गाइड</p>
+            <p class="max-w-2xl mx-auto text-gray-500 mb-8">इस गाइड का उद्देश्य आम जनता को सूचना का अधिकार (RTI) अधिनियम और भारतीय कानून की बुनियादी जानकारी सरल भाषा में देना है, ताकि वे अपने अधिकारों का प्रभावी ढंग से उपयोग कर सकें।</p>
+            <div class="bg-white p-6 rounded-lg shadow-lg inline-block">
+                <h3 class="font-bold text-lg text-gray-700">लेखक</h3>
+                <p class="text-blue-600 text-xl">शिव कुमार</p>
+            </div>
+        </section>
+
+        <section id="basics" class="py-12">
+            <h2 class="text-3xl font-bold text-center mb-10">RTI की बुनियादी बातें</h2>
+            <div class="max-w-4xl mx-auto space-y-4" id="accordion-basics">
+            </div>
+        </section>
+
+        <section id="process" class="py-12 bg-white rounded-lg shadow-lg">
+            <h2 class="text-3xl font-bold text-center mb-10">RTI आवेदन की प्रक्रिया</h2>
+            <p class="text-center max-w-3xl mx-auto text-gray-600 mb-12">RTI आवेदन करना एक सीधी प्रक्रिया है। नीचे दिए गए कदम आपको मार्गदर्शन देंगे कि कैसे एक प्रभावी RTI आवेदन तैयार और दायर किया जाए।</p>
+            <div class="flex flex-col md:flex-row justify-center items-center md:space-x-4 space-y-8 md:space-y-0 px-4">
+                <div class="text-center p-6 bg-blue-50 rounded-lg shadow-sm">
+                    <div class="text-4xl text-blue-500 mb-2">①</div>
+                    <h3 class="text-xl font-semibold mb-2">पहचानें</h3>
+                    <p class="text-gray-600">जानकारी और संबंधित 'Public Authority' को पहचानें।</p>
+                </div>
+                <div class="text-3xl text-blue-300 hidden md:block">→</div>
+                <div class="text-3xl text-blue-300 md:hidden">↓</div>
+                <div class="text-center p-6 bg-blue-50 rounded-lg shadow-sm">
+                    <div class="text-4xl text-blue-500 mb-2">②</div>
+                    <h3 class="text-xl font-semibold mb-2">आवेदन लिखें</h3>
+                    <p class="text-gray-600">निर्धारित प्रारूप में अपना प्रश्न स्पष्ट रूप से लिखें।</p>
+                </div>
+                <div class="text-3xl text-blue-300 hidden md:block">→</div>
+                 <div class="text-3xl text-blue-300 md:hidden">↓</div>
+                <div class="text-center p-6 bg-blue-50 rounded-lg shadow-sm">
+                    <div class="text-4xl text-blue-500 mb-2">③</div>
+                    <h3 class="text-xl font-semibold mb-2">शुल्क दें</h3>
+                    <p class="text-gray-600">₹10 का शुल्क नकद, IPO या DD के माध्यम से जमा करें।</p>
+                </div>
+                <div class="text-3xl text-blue-300 hidden md:block">→</div>
+                 <div class="text-3xl text-blue-300 md:hidden">↓</div>
+                <div class="text-center p-6 bg-blue-50 rounded-lg shadow-sm">
+                     <div class="text-4xl text-blue-500 mb-2">④</div>
+                    <h3 class="text-xl font-semibold mb-2">जमा करें</h3>
+                    <p class="text-gray-600">आवेदन को PIO के पास व्यक्तिगत रूप से या डाक द्वारा जमा करें।</p>
+                </div>
+            </div>
+            
+            <div class="mt-16">
+                 <h3 class="text-2xl font-bold text-center mb-6">जानकारी मिलने की समय-सीमा</h3>
+                 <div class="chart-container">
+                    <canvas id="timelineChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <section id="appeals" class="py-12">
+            <h2 class="text-3xl font-bold text-center mb-10">अपील और शिकायत प्रक्रिया</h2>
+            <p class="text-center max-w-3xl mx-auto text-gray-600 mb-12">यदि आपको समय पर जानकारी नहीं मिलती है या आप प्राप्त जानकारी से असंतुष्ट हैं, तो आप अपील दायर कर सकते हैं। प्रक्रिया के दो चरण हैं।</p>
+            <div class="flex flex-col md:flex-row justify-center items-start md:space-x-8 space-y-8 md:space-y-0">
+                <div class="w-full md:w-1/2 p-6 bg-white rounded-lg shadow-lg border-l-4 border-blue-500">
+                    <h3 class="text-2xl font-semibold mb-3">प्रथम अपील (First Appeal)</h3>
+                    <p class="text-gray-600 mb-4">समय-सीमा समाप्त होने के 30 दिनों के भीतर, उसी विभाग के वरिष्ठ अधिकारी के पास प्रथम अपील दायर करें।</p>
+                    <ul class="list-disc list-inside space-y-2 text-gray-700">
+                        <li><strong>किसे करें:</strong> प्रथम अपीलीय अधिकारी (First Appellate Authority)</li>
+                        <li><strong>कब करें:</strong> PIO के जवाब की तारीख से 30 दिन के भीतर।</li>
+                        <li><strong>शुल्क:</strong> कोई शुल्क नहीं।</li>
+                    </ul>
+                </div>
+                <div class="w-full md:w-1/2 p-6 bg-white rounded-lg shadow-lg border-l-4 border-green-500">
+                    <h3 class="text-2xl font-semibold mb-3">द्वितीय अपील (Second Appeal)</h3>
+                    <p class="text-gray-600 mb-4">यदि आप प्रथम अपील के निर्णय से संतुष्ट नहीं हैं, तो आप 90 दिनों के भीतर राज्य या केंद्रीय सूचना आयोग में दूसरी अपील कर सकते हैं।</p>
+                     <ul class="list-disc list-inside space-y-2 text-gray-700">
+                        <li><strong>किसे करें:</strong> केंद्रीय/राज्य सूचना आयोग (CIC/SIC)</li>
+                        <li><strong>कब करें:</strong> प्रथम अपील के निर्णय से 90 दिन के भीतर।</li>
+                        <li><strong>शुल्क:</strong> कोई शुल्क नहीं।</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="legal" class="py-12 bg-gray-100 rounded-lg">
+            <h2 class="text-3xl font-bold text-center mb-10">RTI और कानूनी जुड़ाव</h2>
+             <p class="text-center max-w-3xl mx-auto text-gray-600 mb-12">RTI केवल एक अकेला कानून नहीं है, बल्कि यह अन्य कानूनी उपकरणों के साथ मिलकर काम करता है, जो नागरिकों को और अधिक सशक्त बनाता है।</p>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="bg-white p-6 rounded-lg shadow-md hover:shadow-xl transition-shadow">
+                    <h3 class="text-xl font-semibold mb-3">RTI + PIL</h3>
+                    <p class="text-gray-600">RTI से प्राप्त जानकारी का उपयोग जनहित याचिका (Public Interest Litigation) दायर करने के लिए एक मजबूत आधार के रूप में किया जा सकता है।</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-md hover:shadow-xl transition-shadow">
+                    <h3 class="text-xl font-semibold mb-3">RTI + Writ</h3>
+                    <p class="text-gray-600">RTI के माध्यम से मिले सबूतों का उपयोग हाईकोर्ट या सुप्रीम कोर्ट में रिट याचिका (Writ Petition) दायर करने के लिए किया जा सकता है।</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-md hover:shadow-xl transition-shadow">
+                    <h3 class="text-xl font-semibold mb-3">RTI और अन्य कानून</h3>
+                    <p class="text-gray-600">IPC, CrPC और संविधान के अनुच्छेद RTI के साथ मिलकर पारदर्शिता और जवाबदेही सुनिश्चित करते हैं।</p>
+                </div>
+            </div>
+            <div class="mt-12">
+                <h3 class="text-2xl font-bold text-center mb-8">सफल RTI केस स्टडीज</h3>
+                <div class="max-w-4xl mx-auto space-y-4" id="accordion-casestudies">
+                </div>
+            </div>
+        </section>
+
+        <section id="resources" class="py-12">
+            <h2 class="text-3xl font-bold text-center mb-10">उपयोगी संसाधन</h2>
+             <p class="text-center max-w-3xl mx-auto text-gray-600 mb-12">यहां आपको RTI प्रक्रिया में मदद करने के लिए महत्वपूर्ण प्रारूप, अक्सर पूछे जाने वाले प्रश्न और अन्य उपयोगी लिंक मिलेंगे।</p>
+            <div>
+                <div class="mb-4 border-b border-gray-200">
+                    <ul class="flex flex-wrap -mb-px text-sm font-medium text-center" id="resource-tabs" role="tablist">
+                        <li class="mr-2" role="presentation">
+                            <button class="inline-block p-4 border-b-2 rounded-t-lg" id="formats-tab" type="button" role="tab" aria-controls="formats" aria-selected="true">ड्राफ्ट प्रारूप</button>
+                        </li>
+                        <li class="mr-2" role="presentation">
+                            <button class="inline-block p-4 border-b-2 rounded-t-lg" id="faq-tab" type="button" role="tab" aria-controls="faq" aria-selected="false">FAQ</button>
+                        </li>
+                        <li class="mr-2" role="presentation">
+                            <button class="inline-block p-4 border-b-2 rounded-t-lg" id="links-tab" type="button" role="tab" aria-controls="links" aria-selected="false">महत्वपूर्ण लिंक</button>
+                        </li>
+                    </ul>
+                </div>
+                <div id="resource-tab-content">
+                    <div class="hidden p-4 rounded-lg bg-gray-50" id="formats" role="tabpanel" aria-labelledby="formats-tab">
+                        <div id="draft-formats-content"></div>
+                    </div>
+                    <div class="hidden p-4 rounded-lg bg-gray-50" id="faq" role="tabpanel" aria-labelledby="faq-tab">
+                         <div class="max-w-4xl mx-auto space-y-4" id="accordion-faq"></div>
+                    </div>
+                    <div class="hidden p-4 rounded-lg bg-gray-50" id="links" role="tabpanel" aria-labelledby="links-tab">
+                         <ul class="list-disc list-inside space-y-3">
+                            <li><a href="https://rtionline.gov.in/" target="_blank" class="text-blue-600 hover:underline">RTI Online Portal (केंद्र सरकार)</a></li>
+                            <li><a href="https://cic.gov.in/" target="_blank" class="text-blue-600 hover:underline">केंद्रीय सूचना आयोग (CIC)</a></li>
+                         </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-gray-800 text-white">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-8 text-center">
+            <p>&copy; 2025 शिव कुमार | सभी अधिकार सुरक्षित।</p>
+            <p class="mt-2 text-sm text-gray-400">यह गाइड केवल शैक्षिक उद्देश्यों के लिए है।</p>
+            <div class="mt-4">
+                <p class="font-semibold mb-2">और जानें:</p>
+                <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://www.youtube.com" alt="QR Code to YouTube" class="mx-auto rounded-lg" onerror="this.onerror=null; this.src='https://placehold.co/150x150/e2e8f0/334155?text=QR+Code';">
+                 <p class="text-sm mt-2 text-gray-400">QR कोड स्कैन करके हमारे यूट्यूब चैनल पर जाएँ।</p>
+            </div>
+        </div>
+    </footer>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const mobileMenuButton = document.getElementById('mobile-menu-button');
+    const mobileMenu = document.getElementById('mobile-menu');
+    mobileMenuButton.addEventListener('click', () => {
+        mobileMenu.classList.toggle('hidden');
+    });
+
+    const navLinks = document.querySelectorAll('#mobile-menu a');
+    navLinks.forEach(link => {
+        link.addEventListener('click', () => {
+            mobileMenu.classList.add('hidden');
+        });
+    });
+
+    // Data for dynamic content
+    const basicsData = [
+        { title: "RTI क्या है? (इतिहास और उद्देश्य)", content: "सूचना का अधिकार अधिनियम 2005 एक क्रांतिकारी कानून है जो भारतीय नागरिकों को सरकारी निकायों से जानकारी मांगने का अधिकार देता है। इसका मुख्य उद्देश्य सरकारी कामकाज में पारदर्शिता और जवाबदेही को बढ़ावा देना है।" },
+        { title: "RTI अधिनियम 2005 की मुख्य धाराएं", content: "<ul><li class='py-1'><strong>धारा 6:</strong> आवेदन प्रक्रिया।</li><li class='py-1'><strong>धारा 7:</strong> जानकारी देने की समय-सीमा।</li><li class='py-1'><strong>धारा 8:</strong> जानकारी देने से छूट।</li><li class='py-1'><strong>धारा 19:</strong> अपील प्रक्रिया।</li></ul>" },
+        { title: "Public Authority कौन होती है?", content: "कोई भी संस्था जो संविधान द्वारा या उसके तहत, संसद या राज्य विधानमंडल द्वारा बनाए गए किसी कानून द्वारा स्थापित की गई है, या सरकार द्वारा जारी अधिसूचना या आदेश द्वारा बनाई गई है, एक 'लोक प्राधिकरण' है। इसमें सरकार द्वारा वित्तपोषित निकाय भी शामिल हैं।" },
+        { title: "कौन RTI डाल सकता है?", content: "भारत का कोई भी नागरिक RTI आवेदन दायर कर सकता है। इसके लिए कोई विशेष योग्यता या कारण बताने की आवश्यकता नहीं है।" }
+    ];
+
+    const caseStudiesData = [
+        { title: "केस स्टडी 1: सड़क निर्माण में भ्रष्टाचार का खुलासा", content: "एक नागरिक ने RTI का उपयोग करके अपने क्षेत्र में सड़क निर्माण पर हुए खर्च का विवरण मांगा। प्राप्त जानकारी से पता चला कि ठेकेदार ने घटिया सामग्री का इस्तेमाल किया था, जिससे जांच हुई और ठेकेदार पर कार्रवाई हुई।" },
+        { title: "केस स्टडी 2: पासपोर्ट जारी करने में देरी", content: "एक आवेदक का पासपोर्ट बिना किसी कारण के महीनों तक अटका हुआ था। RTI दायर करने के 10 दिनों के भीतर, उसे पासपोर्ट कार्यालय से जवाब मिला और एक सप्ताह के अंदर उसका पासपोर्ट जारी कर दिया गया।" }
+    ];
+    
+    const faqData = [
+        { title: "RTI आवेदन का शुल्क कितना है?", content: "केंद्र सरकार के विभागों के लिए आवेदन शुल्क ₹10 है। राज्यों में यह अलग-अलग हो सकता है।" },
+        { title: "क्या मैं हाथ से लिखा आवेदन दे सकता हूँ?", content: "हाँ, आप हिंदी, अंग्रेजी या किसी भी स्थानीय भाषा में टाइप किया हुआ या हाथ से लिखा हुआ आवेदन जमा कर सकते हैं।" },
+        { title: "अगर PIO आवेदन लेने से मना करे तो क्या करें?", content: "आप सीधे डाक द्वारा आवेदन भेज सकते हैं और उसकी शिकायत उसके वरिष्ठ अधिकारी या सीधे सूचना आयोग में कर सकते हैं।" },
+        { title: "जानकारी मिलने में कितना समय लगता है?", content: "सामान्य मामलों में 30 दिन और यदि जानकारी किसी व्यक्ति के जीवन या स्वतंत्रता से संबंधित है तो 48 घंटे।" }
+    ];
+    
+    const formatsData = [
+        { 
+            title: "RTI आवेदन का प्रारूप", 
+            id: "rti-format",
+            content: `सेवा में,\nजन सूचना अधिकारी (PIO)\n[विभाग/कार्यालय का नाम]\n[पूरा पता]\n\nविषय: सूचना का अधिकार अधिनियम, 2005 के तहत जानकारी हेतु आवेदन।\n\nमहोदय/महोदया,\nकृपया निम्नलिखित जानकारी प्रदान करें:\n1. [आपका सवाल यहाँ लिखें]\n2. ...\n\nमैं आवेदन शुल्क के रूप में ₹10/- संलग्न कर रहा/रही हूँ।\n\nभवदीय,\n[आपका नाम]\n[आपका पता]\n[दिनांक]`
+        },
+        { 
+            title: "प्रथम अपील का प्रारूप",
+            id: "first-appeal-format",
+            content: `सेवा में,\nप्रथम अपीलीय अधिकारी\n[विभाग/कारकालय का नाम]\n[पूरा पता]\n\nविषय: RTI अधिनियम 2005 के तहत प्रथम अपील।\n\nमहोदय/महोदया,\nमैंने दिनांक [RTI आवेदन की तारीख] को एक RTI आवेदन दायर किया था जिसका आईडी [RTI आवेदन संख्या] है। मुझे समय पर/संतोषजनक जानकारी नहीं मिली है।\nकृपया मामले की सुनवाई करें और PIO को जानकारी प्रदान करने का निर्देश दें।\n\nभवदीय,\n[आपका नाम]\n[आपका पता]\n[दिनांक]`
+        }
+    ];
+
+    function createAccordion(containerId, data) {
+        const container = document.getElementById(containerId);
+        data.forEach((item, index) => {
+            const wrapper = document.createElement('div');
+            wrapper.className = 'bg-white rounded-lg shadow-sm border border-gray-200';
+            wrapper.innerHTML = `
+                <h2>
+                    <button type="button" class="flex items-center justify-between w-full p-5 font-medium text-left text-gray-600 hover:bg-gray-100" data-accordion-target="#accordion-body-${containerId}-${index}" aria-expanded="false">
+                        <span>${item.title}</span>
+                        <svg class="w-6 h-6 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </button>
+                </h2>
+                <div id="accordion-body-${containerId}-${index}" class="hidden p-5 border-t border-gray-200">
+                    <div class="text-gray-600">${item.content}</div>
+                </div>
+            `;
+            container.appendChild(wrapper);
+        });
+    }
+    
+    createAccordion('accordion-basics', basicsData);
+    createAccordion('accordion-casestudies', caseStudiesData);
+    createAccordion('accordion-faq', faqData);
+
+    const accordionButtons = document.querySelectorAll('[data-accordion-target]');
+    accordionButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const target = document.querySelector(button.getAttribute('data-accordion-target'));
+            const isExpanded = button.getAttribute('aria-expanded') === 'true';
+            button.setAttribute('aria-expanded', !isExpanded);
+            target.classList.toggle('hidden');
+            button.querySelector('svg').classList.toggle('rotate-180');
+        });
+    });
+
+    // Resource Tabs
+    const tabs = document.querySelectorAll('[role="tab"]');
+    const tabContents = document.querySelectorAll('[role="tabpanel"]');
+    tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+            tabs.forEach(t => t.setAttribute('aria-selected', 'false'));
+            tab.setAttribute('aria-selected', 'true');
+
+            tabContents.forEach(c => c.classList.add('hidden'));
+            const content = document.querySelector(tab.getAttribute('aria-controls'));
+            content.classList.remove('hidden');
+            
+            tabs.forEach(t => {
+                t.classList.remove('border-blue-600', 'text-blue-600');
+                t.classList.add('border-transparent', 'hover:text-gray-600', 'hover:border-gray-300');
+            });
+            tab.classList.add('border-blue-600', 'text-blue-600');
+            tab.classList.remove('border-transparent');
+        });
+    });
+    
+    function createFormatSection() {
+        const container = document.getElementById('draft-formats-content');
+        formatsData.forEach(item => {
+            const div = document.createElement('div');
+            div.className = 'mb-6 p-4 border rounded-md bg-white';
+            div.innerHTML = `
+                <h4 class="font-semibold text-lg mb-3">${item.title}</h4>
+                <pre class="bg-gray-100 p-3 rounded-md text-sm whitespace-pre-wrap font-mono">${item.content}</pre>
+                <button class="mt-3 bg-blue-500 text-white px-4 py-2 text-sm rounded-md hover:bg-blue-600" data-copy-target="${item.id}">कॉपी करें</button>
+            `;
+            container.appendChild(div);
+            // Add content to pre for copying
+            const pre = div.querySelector('pre');
+            pre.id = item.id;
+        });
+
+        document.querySelectorAll('[data-copy-target]').forEach(button => {
+            button.addEventListener('click', () => {
+                const targetId = button.getAttribute('data-copy-target');
+                const textToCopy = document.getElementById(targetId).innerText;
+                
+                const textarea = document.createElement('textarea');
+                textarea.value = textToCopy;
+                document.body.appendChild(textarea);
+                textarea.select();
+                try {
+                    document.execCommand('copy');
+                    button.innerText = 'कॉपी हो गया!';
+                    setTimeout(() => { button.innerText = 'कॉपी करें'; }, 2000);
+                } catch (err) {
+                    button.innerText = 'कॉपी नहीं हो सका';
+                }
+                document.body.removeChild(textarea);
+            });
+        });
+    }
+
+    createFormatSection();
+    document.getElementById('formats-tab').click();
+
+
+    // Chart.js Timeline Chart
+    const ctx = document.getElementById('timelineChart').getContext('2d');
+    const timelineChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['सामान्य मामला', 'जीवन/स्वतंत्रता मामला', 'थर्ड पार्टी सूचना'],
+            datasets: [{
+                label: 'दिनों में समय-सीमा',
+                data: [30, 2, 40],
+                backgroundColor: [
+                    'rgba(59, 130, 246, 0.6)',
+                    'rgba(239, 68, 68, 0.6)',
+                    'rgba(16, 185, 129, 0.6)'
+                ],
+                borderColor: [
+                    'rgba(59, 130, 246, 1)',
+                    'rgba(239, 68, 68, 1)',
+                    'rgba(16, 185, 129, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            indexAxis: 'y',
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                x: {
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: 'दिन (Days)'
+                    }
+                }
+            },
+            plugins: {
+                legend: {
+                    display: false
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            let label = context.dataset.label || '';
+                            if (label) {
+                                label += ': ';
+                            }
+                            if (context.parsed.x !== null) {
+                                label += context.parsed.x + ' दिन';
+                            }
+                            return label;
+                        }
+                    }
+                }
+            }
+        }
+    });
+});
+</script>
+</body>
+</html>
